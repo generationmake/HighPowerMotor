@@ -68,16 +68,14 @@ void Ifx007t::pwm(int pwm)
   digitalWrite(p_inh,HIGH);
   if(pwm>0)
   {
-//    if(pwm>255) pwm=255;
-    if(pwm>130) pwm=130;
+    if(pwm>255) pwm=255;
     analogWrite(p_pwm1,pwm);
     digitalWrite(p_pwm2,LOW);
   }
   else
   {
     pwm=-pwm;
-//    if(pwm>255) pwm=255;
-    if(pwm>130) pwm=130;
+    if(pwm>255) pwm=255;
     analogWrite(p_pwm2,pwm);
     digitalWrite(p_pwm1,LOW);
   }

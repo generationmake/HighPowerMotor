@@ -28,8 +28,33 @@ Adafruit_ADS1015 ads1015;    // Construct an ads1015 at the default address: 0x4
 Ifx007t mot1;
 Ifx007t mot2;
 
+//use these defines for Arduino MKR WIFI 1010
+//#define BACKLIGHTPIN A6
+//#define EMERGENCYSTOP A4
+//#define DIS_CS A1
+//#define DIS_A0 A3
+//#define DIS_RESET A2
+//#define MOT1_1 2
+//#define MOT1_2 3
+//#define MOT1_EN 1
+//#define MOT2_1 4
+//#define MOT2_2 5
+//#define MOT2_EN 0
+
+//use these defines for Adafruit Feather M0
 #define BACKLIGHTPIN 13
 #define EMERGENCYSTOP 18
+#define DIS_CS 15
+#define DIS_A0 17
+#define DIS_RESET 16
+#define MOT1_1 10
+#define MOT1_2 9
+#define MOT1_EN 11
+#define MOT2_1 6
+#define MOT2_2 5
+#define MOT2_EN 12
+//
+
 #define OFFSET 554
 #define CUROFFSET1 112
 #define CUROFFSET2 121
@@ -37,62 +62,62 @@ Ifx007t mot2;
 DogGraphicDisplay DOG;
 
 void setup() {
-  pinMode(EMERGENCYSTOP,  INPUT_PULLDOWN);   // set EMERGENCYSTOP pin to output
+  pinMode(EMERGENCYSTOP,  INPUT_PULLDOWN);   // set EMERGENCYSTOP pin to input with pull down
   pinMode(BACKLIGHTPIN,  OUTPUT);   // set backlight pin to output
   digitalWrite(BACKLIGHTPIN,  HIGH);  // enable backlight pin
 
-  DOG.begin(15,0,0,17,16,DOGM132);   //CS = 15, 0,0= use Hardware SPI, A0 = 17, RESET = 16, EA DOGM132-5 (=132x32 dots)
+  DOG.begin(DIS_CS,0,0,DIS_A0,DIS_RESET,DOGM132);   //CS = 15, 0,0= use Hardware SPI, A0 = 17, RESET = 16, EA DOGM132-5 (=132x32 dots)
 
   DOG.clear();  //clear whole display
    Wire.begin();
  
   Serial.begin(9600);
 //  while (!Serial);             // Leonardo: wait for serial monitor
-//  Serial.println("\nI2C Scanner");
-//  byte error, address;
-//  int nDevices;
-// 
-//  Serial.println("Scanning...");
-// 
-//  nDevices = 0;
-//  for(address = 1; address < 127; address++ )
-//  {
-//    // The i2c_scanner uses the return value of
-//    // the Write.endTransmisstion to see if
-//    // a device did acknowledge to the address.
-//    Wire.beginTransmission(address);
-//    error = Wire.endTransmission();
-// 
-//    if (error == 0)
-//    {
-//      Serial.print("I2C device found at address 0x");
-//      if (address<16)
-//        Serial.print("0");
-//      Serial.print(address,HEX);
-//      Serial.println("  !");
-// 
-//      nDevices++;
-//    }
-//    else if (error==4)
-//    {
-//      Serial.print("Unknown error at address 0x");
-//      if (address<16)
-//        Serial.print("0");
-//      Serial.println(address,HEX);
-//    }    
-//  }
-//  if (nDevices == 0)
-//    Serial.println("No I2C devices found\n");
-//  else
-//    Serial.println("done\n");
-// 
-//  delay(500);           // wait 0.5 seconds for next scan
-//
-//  Serial.println("Getting single-ended readings from AIN0..3");
-//  Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV)");
+  Serial.println("\nI2C Scanner");
+  byte error, address;
+  int nDevices;
+ 
+  Serial.println("Scanning...");
+ 
+  nDevices = 0;
+  for(address = 1; address < 127; address++ )
+  {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+ 
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address<16)
+        Serial.print("0");
+      Serial.print(address,HEX);
+      Serial.println("  !");
+ 
+      nDevices++;
+    }
+    else if (error==4)
+    {
+      Serial.print("Unknown error at address 0x");
+      if (address<16)
+        Serial.print("0");
+      Serial.println(address,HEX);
+    }    
+  }
+  if (nDevices == 0)
+    Serial.println("No I2C devices found\n");
+  else
+    Serial.println("done\n");
+ 
+  delay(500);           // wait 0.5 seconds for next scan
+
+  Serial.println("Getting single-ended readings from AIN0..3");
+  Serial.println("ADC Range: +/- 6.144V (1 bit = 3mV)");
   ads1015.begin();
-  mot1.begin(10,9,11);
-  mot2.begin(6,5,12);
+  mot1.begin(MOT1_1,MOT1_2,MOT1_EN);
+  mot2.begin(MOT2_1,MOT2_2,MOT2_EN);
 
 }
 
