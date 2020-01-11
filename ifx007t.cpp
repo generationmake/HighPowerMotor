@@ -47,6 +47,8 @@ void Ifx007t::disable()
 }
 void Ifx007t::stop()
 {
+  analogWrite(p_pwm1,0);
+  analogWrite(p_pwm2,0);
   digitalWrite(p_pwm1,LOW);
   digitalWrite(p_pwm2,LOW);
   digitalWrite(p_inh,HIGH);
@@ -66,10 +68,18 @@ void Ifx007t::fullbackward()
 void Ifx007t::pwm(int pwm)
 {
   digitalWrite(p_inh,HIGH);
-  if(pwm>0)
+  if(pwm==0)
+  {
+    analogWrite(p_pwm1,0);
+    analogWrite(p_pwm2,0);
+    digitalWrite(p_pwm1,LOW);
+    digitalWrite(p_pwm2,LOW);
+  }
+  else if(pwm>0)
   {
     if(pwm>255) pwm=255;
     analogWrite(p_pwm1,pwm);
+    analogWrite(p_pwm2,0);
     digitalWrite(p_pwm2,LOW);
   }
   else
@@ -77,6 +87,7 @@ void Ifx007t::pwm(int pwm)
     pwm=-pwm;
     if(pwm>255) pwm=255;
     analogWrite(p_pwm2,pwm);
+    analogWrite(p_pwm1,0);
     digitalWrite(p_pwm1,LOW);
   }
 
